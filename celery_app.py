@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_celery import make_celery
 from flask_sqlalchemy import SQLAlchemy
-from random import randint, random 
+from random import randint 
 
 
 
