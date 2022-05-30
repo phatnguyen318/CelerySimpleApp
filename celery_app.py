@@ -35,19 +35,12 @@ def insertData():
 def cal_area():
     return area()"""
 
-"""@app.route('/calculatearea')
-def calarea():
-    return area()"""
+@app.route('/calculate_area')
+def calculate_area():
+    cal_area.delay()
+    return 'I sent an async request to calculate area from rectangle'
 
-"""def area():
-    for i in range(7):
-        a = Results.query.filter_by(a).first()
-        b = Results.query.filter_by(b).first()
-        dientich = a * b
-        result = Results(area=dientich)
-        db.session.add(result)
-    db.session.commit()
-    return 'Done cal area'"""
+
 
 @celery.task(name='celery_app.insert') 
 def insert():
@@ -60,6 +53,16 @@ def insert():
         db.session.add(result2)
         
     db.session.commit()
+    
+@celery.task(name='celery_app.cal_area')
+def cal_area():
+    for a, b in range(id):
+        dientich = a*b
+        result = Results(area=dientich)
+        db.session.add(result)
+    db.session.commit()
+        
+        
     
 
 
