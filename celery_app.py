@@ -38,7 +38,13 @@ def cal_area():
 @app.route('/calculate_area')
 def calculate_area():
     cal_area.delay()
-    return 'I sent an async request to calculate area from rectangle'
+    return 'I sent an async request to calculate area of the rectangle'
+
+@app.route('/calculate_perimeter')
+def calculate_perimeter():
+    cal_perimeter.delay()
+    return 'I sent an async request to calculate perimeter of the rectangle'
+
 
 
 
@@ -62,7 +68,14 @@ def cal_area():
         db.session.add(result)
     db.session.commit()
         
-        
+
+@celery.task(name='celery_app.cal_perimeter')
+def cal_perimeter():
+    for a, b in range(id):
+        chuvi = (a+b)*2
+        result = Results(perimeter=chuvi)
+        db.session.add(result)
+    db.session.commit()
     
 
 
