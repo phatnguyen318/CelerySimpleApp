@@ -3,10 +3,6 @@ from flask import Flask
 from flask_celery import make_celery
 from flask_sqlalchemy import SQLAlchemy
 from random import randint 
-from sqlalchemy import create_engine, null
-from sqlalchemy.exc import IntegrityError
-from sqlalchemy.orm import sessionmaker
-
 
 
 app = Flask(__name__)
@@ -26,18 +22,11 @@ class Results(db.Model):
     area = db.Column('area', db.Integer)
     perimeter = db.Column('perimeter', db.Integer)
     
-    
-
 
 @app.route('/insertData')
 def insertData():
     insert.delay()
     return 'I sent an async request to insert data and calculate area, perimeter of rectangle into database'
-
-
-"""@celery.task(name='celery_app.cal_area')
-def cal_area():
-    return area()"""
 
 @app.route('/calculate_area')
 def calculate_area():
@@ -50,8 +39,6 @@ def calculate_perimeter():
     return 'I sent an async request to calculate perimeter of the rectangle'
 
 
-
-
 @celery.task(name='celery_app.insert') 
 def insert():
     for i in range(50):
@@ -61,6 +48,7 @@ def insert():
         db.session.add(result)
         
     db.session.commit()
+
     
 @celery.task(name='celery_app.cal_area')
 def cal_area():
@@ -83,7 +71,6 @@ def cal_perimeter():
         db.session.add(update)
     db.session.commit()
     
-
 
 if __name__ == '__main__':
     app.run(debug=True)
