@@ -26,7 +26,7 @@ class Results(db.Model):
 @app.route('/insertData')
 def insertData():
     insert.delay()
-    return 'I sent an async request to insert data and calculate area, perimeter of rectangle into database'
+    return 'I sent an async request to insert 50 rectangles into database'
 
 @app.route('/calculate_area')
 def calculate_area():
