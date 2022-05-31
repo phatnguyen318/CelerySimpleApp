@@ -2,6 +2,9 @@ from flask import Flask
 from flask_celery import make_celery
 from flask_sqlalchemy import SQLAlchemy
 from random import randint 
+from sqlalchemy import create_engine
+from sqlalchemy.exc import IntegrityError
+from sqlalchemy.orm import sessionmaker
 
 
 
@@ -52,11 +55,11 @@ def calculate_perimeter():
 def insert():
     for i in range(50):
         a = randint(1,50)
-        result = Results(a=a)
         b = randint(1,50)
-        result2 = Results(b=b)
+        area = a * b
+        perimeter = (a+b)* 2
+        result = Results(a=a, b=b, area=area, perimeter=perimeter)
         db.session.add(result)
-        db.session.add(result2)
         
     db.session.commit()
     
