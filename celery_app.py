@@ -1,8 +1,9 @@
+from turtle import update
 from flask import Flask
 from flask_celery import make_celery
 from flask_sqlalchemy import SQLAlchemy
 from random import randint 
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, null
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import sessionmaker
 
@@ -31,7 +32,7 @@ class Results(db.Model):
 @app.route('/insertData')
 def insertData():
     insert.delay()
-    return 'I sent an async request to insert data into database'
+    return 'I sent an async request to insert data and calculate area, perimeter of rectangle into database'
 
 
 """@celery.task(name='celery_app.cal_area')
@@ -56,28 +57,30 @@ def insert():
     for i in range(50):
         a = randint(1,50)
         b = randint(1,50)
-        area = a * b
-        perimeter = (a+b)* 2
-        result = Results(a=a, b=b, area=area, perimeter=perimeter)
+        result = Results(a=a, b=b)
         db.session.add(result)
         
     db.session.commit()
     
 @celery.task(name='celery_app.cal_area')
 def cal_area():
-    for a, b in range(id):
-        dientich = a*b
-        result = Results(area=dientich)
-        db.session.add(result)
+    id = Results.query.all()
+    s = len(id)
+    for i in range(1, s+1):
+        update = Results.query.filter_by(rec_id=i).first()
+        update.area = update.a * update.b
+        db.session.add(update)
     db.session.commit()
         
 
 @celery.task(name='celery_app.cal_perimeter')
 def cal_perimeter():
-    for a, b in range(id):
-        chuvi = (a+b)*2
-        result = Results(perimeter=chuvi)
-        db.session.add(result)
+    id = Results.query.all()
+    s = len(id)
+    for i in range(1, s+1):
+        update = Results.query.filter_by(rec_id=i).first()
+        update.perimeter = (update.a + update.b)*2
+        db.session.add(update)
     db.session.commit()
     
 
